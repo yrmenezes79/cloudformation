@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template para criar uma instância RDS
+
+Resources:
+  MyDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t2.micro
+      Engine: mysql
+      AllocatedStorage: 20
+      DBInstanceIdentifier: mydbinstance
+      MasterUsername: admin
+      MasterUserPassword: XXXXXXXX  # Use uma senha segura
+      VPCSecurityGroups:
+        - !Ref MyDBSecurityGroup
+
+  MyDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to RDS
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0  # Permitir acesso de qualquer IP
